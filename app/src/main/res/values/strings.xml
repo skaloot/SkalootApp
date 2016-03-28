@@ -1,0 +1,64 @@
+<resources>
+    <string name="app_name">Totus App</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_account">My Account</string>
+    <string name="action_logout">Logout</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="title_page">Json List View</string>
+    <string name="title_detail">Detail View</string>
+    <string name="title_setting">Setting</string>
+    <string name="title_account">My Account</string>
+    <string name="title_activity_display_message">My Message</string>
+
+    <string name="btn_json">Get JSON Array</string>
+    <string name="btn_status">Start Order Status</string>
+    <string name="btn_img">Change Image</string>
+    <string name="button_send">Send</string>
+    <string name="status">Status</string>
+    <string name="edit_message">Enter Your Message</string>
+
+    <!--<string-array name="status_array">-->
+        <!--<item>status_1</item>-->
+        <!--<item>status_2</item>-->
+        <!--<item>status_3</item>-->
+        <!--<item>status_4</item>-->
+        <!--<item>status_5</item>-->
+        <!--<item>status_6</item>-->
+        <!--<item>status_7</item>-->
+    <!--</string-array>-->
+
+    <string-array name="laundry_array">
+        <item>laundry_shirt</item>
+        <item>laundry_shirts</item>
+        <item>laundry_blouse</item>
+        <item>laundry_comforter</item>
+        <item>laundry_trousers</item>
+    </string-array>
+
+    <string-array name="tabTitles">
+        <item>Offers</item>
+        <item>Wash &amp; Fold</item>
+        <item>Dry Clean</item>
+        <item>Wash</item>
+    </string-array>
+
+
+    <!--<string-array name="planets_array">-->
+        <!--<item>Mercury</item>-->
+        <!--<item>Venus</item>-->
+        <!--<item>Earth</item>-->
+        <!--<item>Mars</item>-->
+        <!--<item>Jupiter</item>-->
+        <!--<item>Saturn</item>-->
+        <!--<item>Uranus</item>-->
+        <!--<item>Neptune</item>-->
+    <!--</string-array>-->
+    <!--<string name="drawer_open">Open navigation drawer</string>-->
+    <!--<string name="drawer_close">Close navigation drawer</string>-->
+    <!--<string name="action_websearch">Web search</string>-->
+    <!--<string name="app_not_available">Sorry, there\'s no web browser available</string>-->
+
+</resources>

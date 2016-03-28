@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.skaloot.skalootapp"
+    xmlns:tools="http://schemas.android.com/tools">
+
+
+
+    <uses-sdk tools:overrideLibrary="com.google.android.gms" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+	<uses-permission android:name="android.permission.INTERNET" />
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <permission android:name="com.skaloot.skalootapp.permission.C2D_MESSAGE"
+        android:protectionLevel="signature" />
+    <uses-permission android:name="com.skaloot.skalootapp.permission.C2D_MESSAGE" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/icon"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+
+
+        <!--<receiver-->
+            <!--android:name="com.google.android.gms.gcm.GcmReceiver"-->
+            <!--android:exported="true"-->
+            <!--android:permission="com.google.android.c2dm.permission.SEND" >-->
+            <!--<intent-filter>-->
+                <!--<action android:name="com.google.android.c2dm.intent.RECEIVE" />-->
+                <!--<category android:name="com.example.gcm" />-->
+            <!--</intent-filter>-->
+        <!--</receiver>-->
+        <!--service
+            android:name="com.google.android.c2dm.intent.RECEIVE"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+            </intent-filter>
+        </service>
+        <service
+            android:name="com.skaloot.skalootapp.MyInstanceIDListenerService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.android.gms.iid.InstanceID" />
+            </intent-filter>
+        </service-->
+
+
+
+
+        <activity
+            android:name=".SplashActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
+
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+
+
+        <activity
+            android:name=".ListActivity"
+            android:label="@string/title_page"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.skaloot.skalootapp.MainActivity" />
+        </activity>
+
+        <activity
+            android:name=".DetailActivity"
+            android:label="@string/title_detail"
+            android:parentActivityName=".ListActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.skaloot.skalootapp.ListActivity" />
+        </activity>
+
+        <activity
+            android:name=".DisplayMessageActivity"
+            android:label="@string/title_activity_display_message"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.skaloot.skalootapp.MainActivity" />
+        </activity>
+
+        <activity
+            android:name=".SettingActivity"
+            android:label="@string/title_setting"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.skaloot.skalootapp.MainActivity" />
+        </activity>
+
+        <activity
+            android:name=".AccountActivity"
+            android:label="@string/title_account"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.skaloot.skalootapp.MainActivity" />
+        </activity>
+
+    </application>
+
+</manifest>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="55dp" android:layout_height="wrap_content">
+    <item android:drawable="@drawable/btn_drawer" android:state_focused="true" />
+    <item android:drawable="@drawable/btn_drawer_2" android:state_pressed="true" />
+    <item android:drawable="@drawable/btn_drawer" />
+</selector>
