@@ -23,8 +23,8 @@ public class ListActivity extends AppCompatActivity {
 
     public final static String DetailText = "com.skaloot.skalootapp.MESSAGE";
     final String TAG = "ListActivity.java";
-    String HOST = "http://www.traveltho.com/";
-//    String HOST = "http://192.168.0.10/";
+//    String HOST = "http://www.traveltho.com/";
+    String HOST = "http://192.168.0.10/";
 
     String[] stringArray = null;
 
@@ -75,7 +75,7 @@ public class ListActivity extends AppCompatActivity {
             try {
                 JsonParser jParser = new JsonParser();
                 JSONObject json = jParser.getJSONFromUrl(HOST+"totus/json");
-                dataJsonArr = json.getJSONArray("OS");
+                dataJsonArr = json.getJSONArray("Landry");
                 stringArray = new String[dataJsonArr.length()];
 
                 for (int i = 0; i < dataJsonArr.length(); i++) {

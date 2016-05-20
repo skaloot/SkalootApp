@@ -32,7 +32,7 @@ import org.json.JSONObject;
 public class MainActivity extends AppCompatActivity {
 
     public final static String EXTRA_MESSAGE = null;
-    public final static String EXTRA_MESSAGE_2 = null;
+//    public final static String EXTRA_MESSAGE_2 = null;
 
 
 //    public int status = -1;
@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
     String[] LaundryTitle = null;
     Integer[] ImgId = null;
 
-//        String HOST = "http://www.traveltho.com/";
+//    String HOST = "http://www.traveltho.com/";
     String HOST = "http://192.168.0.10/";
 
     AppSectionsPagerAdapter mAppSectionsPagerAdapter;
@@ -236,17 +236,17 @@ public class MainActivity extends AppCompatActivity {
             try {
                 JsonParser jParser = new JsonParser();
                 JSONObject json = jParser.getJSONFromUrl(HOST+"totus/laundry");
-                dataJsonArr = json.getJSONArray("OS");
+                dataJsonArr = json.getJSONArray("Laundry");
                 LaundryArray = new String[dataJsonArr.length()];
                 LaundryTitle = new String[dataJsonArr.length()];
-//                ImgId = new Integer[dataJsonArr.length()];
+                ImgId = new Integer[dataJsonArr.length()];
 
                 for (int i = 0; i < dataJsonArr.length(); i++) {
                     JSONObject c = dataJsonArr.getJSONObject(i);
                     LaundryArray[i] = c.getString("brand");
                     LaundryTitle[i] = c.getString("title");
-//                    ImgId[i] = MainActivity.this.getResources().getIdentifier(LaundryArray[i],
-//                            "drawable", getPackageName());
+                    ImgId[i] = MainActivity.this.getResources().getIdentifier(LaundryArray[i],
+                            "drawable", getPackageName());
                 }
             } catch (JSONException e) {
                 e.printStackTrace();

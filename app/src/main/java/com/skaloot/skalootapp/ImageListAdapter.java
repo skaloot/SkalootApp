@@ -25,7 +25,7 @@ public class ImageListAdapter extends ArrayAdapter<String> {
     private final Activity context;
     private final String[] itemname;
     private final Integer[] imgid;
-//   String HOST = "http://www.traveltho.com/";
+//    String HOST = "http://www.traveltho.com/";
      String HOST = "http://192.168.0.10/";
 
     private ImageView imgView;

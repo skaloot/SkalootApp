@@ -6,12 +6,13 @@ package com.skaloot.skalootapp;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+//import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.MenuItem;
+//import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -73,8 +74,8 @@ public class AccountActivity extends AppCompatActivity {
                 if (result != null) {
                     bmImage.setImageBitmap(result);
                 } else {
-//                    Drawable placeholder = bmImage.getContext().getResources().getDrawable(imageResource);
-//                    bmImage.setImageDrawable(placeholder);
+                    Drawable placeholder = bmImage.getContext().getResources().getDrawable(imageResource);
+                    bmImage.setImageDrawable(placeholder);
                 }
             }
         }

@@ -15,10 +15,7 @@ public class SettingActivity extends AppCompatActivity {
 
     public final static String DetailText = "com.skaloot.skalootapp.MESSAGE";
     final String TAG = "ListActivity.java";
-    String HOST = "http://www.traveltho.com/";
-//    String HOST = "http://192.168.0.10/";
 
-    String[] stringArray = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,18 +25,7 @@ public class SettingActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-//        new GetJson().execute();
     }
-
-
-
-    public void show_data() {
-        ArrayAdapter adapter = new ArrayAdapter(SettingActivity.this, R.layout.activity_listview, stringArray);
-        ListView listView = (ListView) findViewById(R.id.mobile_list);
-        listView.setAdapter(adapter);
-    }
-
 
 
     
