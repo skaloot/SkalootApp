@@ -21,7 +21,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.widget.ImageView;
 
-//import com.technotalkative.loadwebimage.R;
+
 
 public class ImageLoader {
 
@@ -108,7 +108,8 @@ public class ImageLoader {
 
             //decode with inSampleSize
             BitmapFactory.Options o2 = new BitmapFactory.Options();
-            o2.inSampleSize=scale;
+//            o2.inSampleSize=scale;
+            o2.inSampleSize=1;
             return BitmapFactory.decodeStream(new FileInputStream(f), null, o2);
         } catch (FileNotFoundException e) {}
         return null;
@@ -173,5 +174,6 @@ public class ImageLoader {
         memoryCache.clear();
         fileCache.clear();
     }
+
 
 }

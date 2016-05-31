@@ -15,7 +15,6 @@ import android.widget.TextView;
 public class DetailActivity extends AppCompatActivity {
 
     final String TAG = "GetDetail.java";
-    ProgressDialog progress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,3 +55,4 @@ public class DetailActivity extends AppCompatActivity {
     }
 
 }
+

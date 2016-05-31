@@ -23,8 +23,6 @@ public class ListActivity extends AppCompatActivity {
 
     public final static String DetailText = "com.skaloot.skalootapp.MESSAGE";
     final String TAG = "ListActivity.java";
-//    String HOST = "http://www.traveltho.com/";
-    String HOST = "http://192.168.0.10/";
 
     String[] stringArray = null;
 
@@ -56,6 +54,7 @@ public class ListActivity extends AppCompatActivity {
     public class GetJson extends AsyncTask<Void,Void,Void> {
         final String TAG = "GetJson.java";
         JSONArray dataJsonArr = null;
+        String HOST = getResources().getString(R.string.host);
 
         private ProgressDialog progressDialog = new ProgressDialog(ListActivity.this);
         protected void onPreExecute() {

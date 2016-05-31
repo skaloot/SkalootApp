@@ -22,35 +22,36 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+//import android.widget.ScrollView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 
 public class MainActivity extends AppCompatActivity {
 
-    public final static String EXTRA_MESSAGE = null;
-//    public final static String EXTRA_MESSAGE_2 = null;
-
-
-//    public int status = -1;
-//    public String responseText = null;
-//    public String TAG = "GLOBAL RESPONSE";
-//    public String ORDER = null;
-//    Timer timer;
-    String[] LaundryArray = null;
+    private static Context mContext;
+    String[] ImgURL = null;
     String[] LaundryTitle = null;
     Integer[] ImgId = null;
-
-//    String HOST = "http://www.traveltho.com/";
-    String HOST = "http://192.168.0.10/";
 
     AppSectionsPagerAdapter mAppSectionsPagerAdapter;
     ViewPager mViewPager;
     TabLayout tabLayout;
     ListView list;
+    String ret = null;
+    String message = null;
+    public static View rootView;
 
     // OnCreate
     // =============================================================================================================================================
@@ -58,11 +59,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        mContext = this;
 
         ImageView btnback = (ImageView)findViewById(R.id.btn_back);
         btnback.setImageResource(R.drawable.button_drawer);
-//        ImageView btncart = (ImageView)findViewById(R.id.btn_cart);
-//        btncart.setImageResource(R.drawable.button_cart);
 
         mAppSectionsPagerAdapter = new AppSectionsPagerAdapter(getSupportFragmentManager(),
                 MainActivity.this);
@@ -72,86 +72,25 @@ public class MainActivity extends AppCompatActivity {
         tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
-        new GetLaundry().execute();
+        readFile();
     }
 
 
-    // SetTimer
-    // =============================================================================================================================================
-//    public void set_timer(View view) {
-//        if(ORDER == null) {
-//            timer = new Timer();
-//            timer.scheduleAtFixedRate(new TimerTask() {
-//                @Override
-//                public void run() {
-//                    new GetStatus().execute();
-//                }
-//            }, 0, 15000);
-//            Log.e("timer", "timer has been created..");
-//            ORDER = "Started";
-//        } else {
-//            Toast.makeText(MainActivity.this, "Order Status has already started",
-//                    Toast.LENGTH_SHORT).show();
-//        }
-//    }
-
-
-    // GetStatus
-    // =============================================================================================================================================
-//    public class GetStatus extends AsyncTask<Void,Void,Void> {
-//        JSONArray dataJsonArr = null;
-//        int stat;
-//
-//        protected void onPreExecute() {
-//            super.onPreExecute();
-//        }
-//
-//        @Override
-//        protected Void doInBackground(Void... params) {
-//            Log.e("Response - ", "Getting response from URL - Started");
-//            try {
-//                JsonParser jParser = new JsonParser();
-//                JSONObject json = jParser.getJSONFromUrl(HOST+"totus/status");
-//                dataJsonArr = json.getJSONArray("response");
-//                responseText = dataJsonArr.getJSONObject(0).getString("msg");
-//                stat = dataJsonArr.getJSONObject(0).getInt("status");
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//            }
-//            return null;
-//        }
-//
-//        @Override
-//        protected void onPostExecute(Void aVoid) {
-//            super.onPostExecute(aVoid);
-//            if(stat != status) {
-//                status = stat;
-////                change_img();
-//                Toast.makeText(MainActivity.this, responseText,
-//                        Toast.LENGTH_SHORT).show();
-//            }
-//            if(stat == 6) {
-////                timer.cancel();
-//                status = -1;
-//                ORDER = null;
-//            }
-//            Log.e(TAG, "Status - " + status);
-//        }
-//    }
+    public static Context getContext(){
+        return mContext;
+    }
 
 
 
     public void sendMessage(View view) {
-        Intent intent = new Intent(this, DisplayMessageActivity.class);
         EditText editText = (EditText) findViewById(R.id.edit_message);
-        String message = editText.getText().toString();
-        intent.putExtra(EXTRA_MESSAGE, message);
-        startActivity(intent);
+        message = editText.getText().toString();
+        new SendMessage().execute();
     }
 
 
     public void list_this() {
-        ImageListAdapter adapter = new ImageListAdapter(MainActivity.this, LaundryArray, ImgId);
+        ImageListAdapter adapter = new ImageListAdapter(MainActivity.this, ImgURL, ImgId);
         list = (ListView)findViewById(R.id.Laundry_list_home);
         list.setAdapter(adapter);
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -159,30 +98,239 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
                 Intent intent = new Intent(MainActivity.this, AccountActivity.class);
-                intent.putExtra(EXTRA_MESSAGE, LaundryArray[+position]);
-//                intent.putExtra(EXTRA_MESSAGE_2, LaundryTitle[+position]);
+                intent.putExtra("jsonArray", "{\"title\":\""+LaundryTitle[+position]+"\",\"imgUrl\":\""+ImgURL[+position]+"\"}");
                 startActivity(intent);
             }
         });
     }
 
 
-    public void go_back(View view) {
-        finish();
+    public void readFile() {
+        String filename = getResources().getString(R.string.filename);
+        try {
+            InputStream inputStream = openFileInput(filename);
+
+            if ( inputStream != null ) {
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                String receiveString = "";
+                StringBuilder stringBuilder = new StringBuilder();
+
+                while ( (receiveString = bufferedReader.readLine()) != null ) {
+                    stringBuilder.append(receiveString);
+                }
+
+                inputStream.close();
+                ret = stringBuilder.toString();
+            }
+        }
+        catch (FileNotFoundException e) {
+            Log.e("login activity", "File not found: " + e.toString());
+        } catch (IOException e) {
+            Log.e("login activity", "Can not read file: " + e.toString());
+        }
+
+        if(ret == null) {
+            Log.e("FILE Status", "FILE Status - NULL");
+            new GetLaundry().execute();
+        } else {
+            Log.e("FILE Status", "FILE Status - EXIST");
+            Log.e("JSON STRINGS", "JSON STRINGS - " + ret);
+            new GetLaundryLocal().execute();
+        }
     }
 
 
+
+    // SendMessage
+    // =============================================================================================================================================
+    public class SendMessage extends AsyncTask<Void,Void,Void> {
+        final String TAG = "SendMessage.java";
+//        ScrollView scroll_view = (ScrollView) findViewById(R.id.scroll_msg);
+        JSONArray dataJsonArr = null;
+        String HOST = getResources().getString(R.string.host);
+        String newMessage = null;
+
+
+        private ProgressDialog progressDialog = new ProgressDialog(MainActivity.this);
+        protected void onPreExecute() {
+            progressDialog.setMessage("Sending Meesage...");
+            progressDialog.show();
+            progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                public void onCancel(DialogInterface arg0) {
+                    SendMessage.this.cancel(true);
+                }
+            });
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            Log.e(TAG, "Sending Message - Started");
+            try {
+                JsonParser jParser = new JsonParser();
+                JSONObject json = jParser.getJSONFromUrl(HOST+"totus/laundry");
+                dataJsonArr = json.getJSONArray("Laundry");
+                newMessage = message;
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            Log.e(TAG, "Sending Message - Success");
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            progressDialog.dismiss();
+            Log.e(TAG, "Message Sent - " + newMessage);
+            EditText editText = (EditText) findViewById(R.id.edit_message);
+            editText.setText("");
+            Toast.makeText(MainActivity.this, "Message Sent", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
+
+    // GetLaundry
+    // =============================================================================================================================================
+    public class GetLaundry extends AsyncTask<Void,Void,Void> {
+        final String TAG = "GetJson.java";
+        JSONArray dataJsonArr = null;
+        String HOST = getResources().getString(R.string.host);
+        String filename = getResources().getString(R.string.filename);
+
+
+        private ProgressDialog progressDialog = new ProgressDialog(MainActivity.this);
+        protected void onPreExecute() {
+            progressDialog.setMessage("Loading...");
+            progressDialog.show();
+            progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                public void onCancel(DialogInterface arg0) {
+                    GetLaundry.this.cancel(true);
+                }
+            });
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            Log.e(TAG, "Getting Json from URL - Started");
+            try {
+                JsonParser jParser = new JsonParser();
+                JSONObject json = jParser.getJSONFromUrl(HOST+"totus/laundry");
+                dataJsonArr = json.getJSONArray("Laundry");
+                ImgURL = new String[dataJsonArr.length()];
+                LaundryTitle = new String[dataJsonArr.length()];
+                ImgId = new Integer[dataJsonArr.length()];
+
+                for (int i = 0; i < dataJsonArr.length(); i++) {
+                    JSONObject c = dataJsonArr.getJSONObject(i);
+                    ImgURL[i] = c.getString("url");
+                    LaundryTitle[i] = c.getString("title");
+                    ImgId[i] = MainActivity.this.getResources().getIdentifier(ImgURL[i],
+                            "drawable", "com.skaloot.skalootapp");
+                    Log.e("JSON", "JSON - " + ImgURL[i] + " | " + LaundryTitle[i] + " | " + ImgId[i]);
+                }
+
+                String string = json.toString();
+                FileOutputStream outputStream;
+                try {
+                    outputStream = openFileOutput(filename, Context.MODE_PRIVATE);
+                    outputStream.write(string.getBytes());
+                    outputStream.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            Log.e(TAG, "Getting Json from URL - Success");
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            list_this();
+            super.onPostExecute(aVoid);
+            progressDialog.dismiss();
+        }
+    }
+
+
+    // GetLaundry Local
+    // =============================================================================================================================================
+    public class GetLaundryLocal extends AsyncTask<Void,Void,Void> {
+        final String TAG = "GetJsonLocal.java";
+        JSONArray dataJsonArr = null;
+        String filename = getResources().getString(R.string.filename);
+
+
+        private ProgressDialog progressDialog = new ProgressDialog(MainActivity.this);
+        protected void onPreExecute() {
+            progressDialog.setMessage("Loading...");
+            progressDialog.show();
+            progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                public void onCancel(DialogInterface arg0) {
+                    GetLaundryLocal.this.cancel(true);
+                }
+            });
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            Log.e(TAG, "Getting Json from Local - Started");
+            try {
+                JSONObject json = new JSONObject(ret);
+                dataJsonArr = json.getJSONArray("Laundry");
+                ImgURL = new String[dataJsonArr.length()];
+                LaundryTitle = new String[dataJsonArr.length()];
+                ImgId = new Integer[dataJsonArr.length()];
+
+                for (int i = 0; i < dataJsonArr.length(); i++) {
+                    JSONObject c = dataJsonArr.getJSONObject(i);
+                    ImgURL[i] = c.getString("url");
+                    LaundryTitle[i] = c.getString("title");
+                    ImgId[i] = MainActivity.this.getResources().getIdentifier(ImgURL[i],
+                            "drawable", "com.skaloot.skalootapp");
+                    Log.e("JSON", "JSON - " + ImgURL[i] + " | " + LaundryTitle[i] + " | " + ImgId[i]);
+                }
+
+                String dir = getFilesDir().getAbsolutePath();
+                File f0 = new File(dir, filename);
+                boolean d0 = f0.delete();
+                Log.e("Delete file", "Delete file - " + d0);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+                String dir = getFilesDir().getAbsolutePath();
+                File f0 = new File(dir, filename);
+                boolean d0 = f0.delete();
+                Log.e("JSON Error", "Delete file - " + d0);
+            }
+            Log.e(TAG, "Getting Json from Local - Success");
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            list_this();
+            super.onPostExecute(aVoid);
+            progressDialog.dismiss();
+        }
+    }
 
 
     // AppSectionsPagerAdapter
     // =============================================================================================================================================
     public static class AppSectionsPagerAdapter extends FragmentPagerAdapter {
-        private Context context;
-        private String tabTitles[] = new String[] { "Offers", "Wash & Fold", "Dry Clean", "Wash" };
+        String tabTitles[] = MainActivity.getContext().getResources().getStringArray(R.array.tabTitles);
 
         public AppSectionsPagerAdapter(FragmentManager fm, Context context) {
             super(fm);
-            this.context = context;
         }
 
         @Override
@@ -212,57 +360,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    // GetLaundry
-    // =============================================================================================================================================
-    public class GetLaundry extends AsyncTask<Void,Void,Void> {
-        final String TAG = "GetJson.java";
-        JSONArray dataJsonArr = null;
-
-        private ProgressDialog progressDialog = new ProgressDialog(MainActivity.this);
-        protected void onPreExecute() {
-            progressDialog.setMessage("Loading...");
-            progressDialog.show();
-            progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                public void onCancel(DialogInterface arg0) {
-                    GetLaundry.this.cancel(true);
-                }
-            });
-            super.onPreExecute();
-        }
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            Log.e(TAG, "Getting Json from URL - Started");
-            try {
-                JsonParser jParser = new JsonParser();
-                JSONObject json = jParser.getJSONFromUrl(HOST+"totus/laundry");
-                dataJsonArr = json.getJSONArray("Laundry");
-                LaundryArray = new String[dataJsonArr.length()];
-                LaundryTitle = new String[dataJsonArr.length()];
-                ImgId = new Integer[dataJsonArr.length()];
-
-                for (int i = 0; i < dataJsonArr.length(); i++) {
-                    JSONObject c = dataJsonArr.getJSONObject(i);
-                    LaundryArray[i] = c.getString("brand");
-                    LaundryTitle[i] = c.getString("title");
-                    ImgId[i] = MainActivity.this.getResources().getIdentifier(LaundryArray[i],
-                            "drawable", getPackageName());
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            Log.e(TAG, "Getting Json from URL - Success");
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            list_this();
-            super.onPostExecute(aVoid);
-            progressDialog.dismiss();
-        }
-    }
-
+    public static Bundle bundle;
 
     // Homepage
     // =============================================================================================================================================
@@ -270,7 +368,8 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.activity_home_1, container, false);
+            if(savedInstanceState != null)  bundle = savedInstanceState;
+            rootView = inflater.inflate(R.layout.activity_home_1, container, false);
             return rootView;
         }
     }
@@ -282,7 +381,8 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.activity_home_2, container, false);
+            if(savedInstanceState != null)  bundle = savedInstanceState;
+            rootView = inflater.inflate(R.layout.activity_home_2, container, false);
             return rootView;
         }
     }
@@ -294,7 +394,8 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.activity_home_3, container, false);
+            if(savedInstanceState != null)  bundle = savedInstanceState;
+            rootView = inflater.inflate(R.layout.activity_home_3, container, false);
             return rootView;
         }
     }
@@ -306,82 +407,35 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.activity_home_4, container, false);
+            if(savedInstanceState != null)  bundle = savedInstanceState;
+            rootView = inflater.inflate(R.layout.activity_home_4, container, false);
             return rootView;
         }
     }
 
 
 
-
-    // LISTENER
-    // =============================================================================================================================================
-    @Override
-    protected void onStop() {
-        super.onStop();
-    }
-
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-    }
-
     @Override
     public void onBackPressed() {
+        Log.e("Button Pressed", "Button Back");
+        // finish();
         super.onBackPressed();
     }
 
-//    public void clearCache() {
-//        MemoryCache memoryCache = new MemoryCache();
-//        memoryCache.clear();
-//        FileCache fileCache = new FileCache(this.getApplicationContext());
-//        fileCache.clear();
-//    }
-
-
-
-    // OptionMenu
-    // =============================================================================================================================================
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.menu_my, menu);
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        int id = item.getItemId();
-//
-//        if (id == R.id.action_settings) {
-//            return true;
-//        } else if (id == R.id.action_settings) {
-//            Intent intent = new Intent(this, SettingActivity.class);
-//            startActivity(intent);
-//            return true;
-//        } else if (id == R.id.action_account) {
-////            Intent intent = new Intent(this, AccountActivity.class);
-////            startActivity(intent);
-//            return true;
-//        } else if (id == R.id.action_logout) {
-//            finish();
-//            Toast.makeText(MainActivity.this, "You have logged out.",
-//                    Toast.LENGTH_SHORT).show();
-//            return true;
-//        }
-//        return super.onOptionsItemSelected(item);
-//    }
+    public void go_back(View view) {
+        finish();
+    }
 
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
-        super.onSaveInstanceState(savedInstanceState);
+//        super.onSaveInstanceState(savedInstanceState);
     }
 
 
     @Override
     public void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
+//        super.onRestoreInstanceState(savedInstanceState);
     }
 
 }

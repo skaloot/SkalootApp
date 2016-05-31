@@ -22,10 +22,8 @@ public class DisplayMessageActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
         Intent intent = getIntent();
-        String message = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
+        String message = intent.getStringExtra("msg");
         TextView textView = new TextView(this);
         textView.setTextSize(20);
         textView.setText(message);
@@ -52,3 +50,4 @@ public class DisplayMessageActivity extends AppCompatActivity {
     }
 
 }
+
