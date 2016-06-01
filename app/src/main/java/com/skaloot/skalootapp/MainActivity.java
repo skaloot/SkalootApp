@@ -19,6 +19,7 @@ import android.view.View;
 import android.content.Intent;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -52,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
     String ret = null;
     String message = null;
     public static View rootView;
+    public static Bundle bundle;
 
     // OnCreate
     // =============================================================================================================================================
@@ -64,8 +66,7 @@ public class MainActivity extends AppCompatActivity {
         ImageView btnback = (ImageView)findViewById(R.id.btn_back);
         btnback.setImageResource(R.drawable.button_drawer);
 
-        mAppSectionsPagerAdapter = new AppSectionsPagerAdapter(getSupportFragmentManager(),
-                MainActivity.this);
+        mAppSectionsPagerAdapter = new AppSectionsPagerAdapter(getSupportFragmentManager());
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mAppSectionsPagerAdapter);
 
@@ -329,7 +330,7 @@ public class MainActivity extends AppCompatActivity {
     public static class AppSectionsPagerAdapter extends FragmentPagerAdapter {
         String tabTitles[] = MainActivity.getContext().getResources().getStringArray(R.array.tabTitles);
 
-        public AppSectionsPagerAdapter(FragmentManager fm, Context context) {
+        public AppSectionsPagerAdapter(FragmentManager fm) {
             super(fm);
         }
 
@@ -337,13 +338,13 @@ public class MainActivity extends AppCompatActivity {
         public Fragment getItem(int i) {
             switch (i) {
                 case 0:
-                    return new Homepage();
+                    return Homepage.newInstance(1);
                 case 1:
-                    return new Page_2();
+                    return Page_2.newInstance(2);
                 case 2:
-                    return new Page_3();
+                    return Page_3.newInstance(3);
                 case 3:
-                    return new Page_4();
+                    return Page_4.newInstance(1);
             }
             return null;
         }
@@ -360,11 +361,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public static Bundle bundle;
 
     // Homepage
     // =============================================================================================================================================
     public static class Homepage extends Fragment {
+        private static final String ARG_SECTION_NUMBER = "section_number";
+
+        public static Homepage newInstance(int sectionNumber) {
+            Homepage fragment = new Homepage();
+            Bundle args = new Bundle();
+            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+            fragment.setArguments(args);
+            return fragment;
+        }
+
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
@@ -377,6 +387,15 @@ public class MainActivity extends AppCompatActivity {
     // 2nd Page
     // =============================================================================================================================================
     public static class Page_2 extends Fragment {
+        private static final String ARG_SECTION_NUMBER = "section_number";
+
+        public static Page_2 newInstance(int sectionNumber) {
+            Page_2 fragment = new Page_2();
+            Bundle args = new Bundle();
+            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+            fragment.setArguments(args);
+            return fragment;
+        }
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -390,6 +409,15 @@ public class MainActivity extends AppCompatActivity {
     // 3nd Page
     // =============================================================================================================================================
     public static class Page_3 extends Fragment {
+        private static final String ARG_SECTION_NUMBER = "section_number";
+
+        public static Page_3 newInstance(int sectionNumber) {
+            Page_3 fragment = new Page_3();
+            Bundle args = new Bundle();
+            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+            fragment.setArguments(args);
+            return fragment;
+        }
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -403,6 +431,15 @@ public class MainActivity extends AppCompatActivity {
     // 4nd Page
     // =============================================================================================================================================
     public static class Page_4 extends Fragment {
+        private static final String ARG_SECTION_NUMBER = "section_number";
+
+        public static Page_4 newInstance(int sectionNumber) {
+            Page_4 fragment = new Page_4();
+            Bundle args = new Bundle();
+            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+            fragment.setArguments(args);
+            return fragment;
+        }
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -429,13 +466,13 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
-//        super.onSaveInstanceState(savedInstanceState);
+        super.onSaveInstanceState(savedInstanceState);
     }
 
 
     @Override
     public void onRestoreInstanceState(Bundle savedInstanceState) {
-//        super.onRestoreInstanceState(savedInstanceState);
+        super.onRestoreInstanceState(savedInstanceState);
     }
 
 }
