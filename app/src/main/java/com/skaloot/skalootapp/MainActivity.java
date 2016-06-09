@@ -344,7 +344,7 @@ public class MainActivity extends AppCompatActivity {
                 case 2:
                     return Page_3.newInstance(3);
                 case 3:
-                    return Page_4.newInstance(1);
+                    return Page_4.newInstance(4);
             }
             return null;
         }
@@ -360,29 +360,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
-
-    // Homepage
-    // =============================================================================================================================================
-    public static class Homepage extends Fragment {
-        private static final String ARG_SECTION_NUMBER = "section_number";
-
-        public static Homepage newInstance(int sectionNumber) {
-            Homepage fragment = new Homepage();
-            Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            fragment.setArguments(args);
-            return fragment;
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            if(savedInstanceState != null)  bundle = savedInstanceState;
-            rootView = inflater.inflate(R.layout.activity_home_1, container, false);
-            return rootView;
-        }
-    }
 
     // 2nd Page
     // =============================================================================================================================================
