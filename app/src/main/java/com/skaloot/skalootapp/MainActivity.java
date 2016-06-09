@@ -361,6 +361,31 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+
+    // Homepage
+    // =============================================================================================================================================
+    public static class Homepage extends Fragment {
+        private static final String ARG_SECTION_NUMBER = "section_number";
+        private View rootView;
+
+        public static Homepage newInstance(int sectionNumber) {
+            Homepage fragment = new Homepage();
+            Bundle args = new Bundle();
+            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+            fragment.setArguments(args);
+            return fragment;
+        }
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+            if(rootView == null) {
+                rootView = inflater.inflate(R.layout.activity_home_1, container, false);
+            }
+            return rootView;
+        }
+    }
+
     // 2nd Page
     // =============================================================================================================================================
     public static class Page_2 extends Fragment {
